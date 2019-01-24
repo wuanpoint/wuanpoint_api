@@ -1,0 +1,12 @@
+#模板文件，修改内容后不需要上传
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://ip:port/database_name?useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    username: username
+    password: password
+server:
+  port: 8081
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
