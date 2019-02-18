@@ -48,7 +48,7 @@ public class MoviesDetails extends MoviesBase {
     private String urlDouban;
 
     /**
-     * 海报链接
+     * 海报链接（poster）
      */
     @XmlElement
     private String url;
