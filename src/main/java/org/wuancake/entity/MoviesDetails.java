@@ -1,9 +1,6 @@
 package org.wuancake.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -12,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Created by ericheel on 2019/2/18.
  * 影片详情
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -48,6 +46,24 @@ public class MoviesDetails extends MoviesBase {
      */
     @XmlElement
     private String urlDouban;
+
+    /**
+     * 海报链接
+     */
+    @XmlElement
+    private String url;
+
+    /**
+     * 评分
+     */
+    @XmlElement
+    private float rating;
+
+    /**
+     * 简介
+     */
+    @XmlElement
+    private String summary;
 
 
 }
