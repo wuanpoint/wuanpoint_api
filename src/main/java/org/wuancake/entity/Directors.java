@@ -10,24 +10,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Created by ericheel on 2019/2/18.
- * 演员实体类
+ * 导演实体类
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @XmlRootElement
 @ToString
-public class Actors {
+public class Directors {
 
     /**
-     * 演员id
+     * 导演id
      */
     @XmlElement
     private int id;
 
     /**
-     * 演员姓名
+     * 导演姓名
      */
     @XmlElement
     private String name;
+
 }

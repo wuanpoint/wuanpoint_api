@@ -7,27 +7,46 @@ import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.sql.Timestamp;
 
 /**
  * Created by ericheel on 2019/2/18.
- * 演员实体类
+ * 影片基础信息表
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @XmlRootElement
 @ToString
-public class Actors {
+public class MoviesBase {
 
     /**
-     * 演员id
+     * 影片id
      */
     @XmlElement
     private int id;
 
     /**
-     * 演员姓名
+     * 影片（首页）分类
      */
     @XmlElement
-    private String name;
+    private int type;
+
+    /**
+     * 影片标题
+     */
+    @XmlElement
+    private String title;
+
+    /**
+     * 摘要
+     */
+    @XmlElement
+    private String digest;
+
+    /**
+     * 资源添加时间
+     */
+    @XmlElement
+    private Timestamp createdAt;
 }
