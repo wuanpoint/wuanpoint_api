@@ -32,15 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//###午安点评配置，由于dev配置文件不让上传，就把需要的配置项写在这里了
-//WUAN_POINT:
-//    APP_NAME: WUAN_POINT  #应用名称
-//    SECRET: $2a$10$8Z9miMLQCwMkxMx0JuubD.Kwp5EDbfe0z7rMhGun7IcVntEf/RGE6 #午安点评项目秘钥
-//    SCOPE: public_profile #授权范围
-//    JWT_SECRET: 08caII1U7sgJ1HEdBWkZtgTdnF3ie5Em #JWT秘钥
-//    OIDC_DOMAIN_NAME: http://dev-oidc.wuanla.tk #OIDC域名
-//    SUB_APP: 233 #午安点评作为子系统的id，暂无,233是随便写的一个数
-
 /**
  * 连接OIDC项目的工具类
  * oidc项目的负责人gt说client_id属性由前端发给后端，oidc对这个属性不做检查，值是什么无所谓。
