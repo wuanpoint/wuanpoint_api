@@ -83,16 +83,4 @@ public class ResourcesController {
         else
             return "{\"error\":\"添加资源失败\"}";
     }
-
-    @GetMapping("/login")
-    public String login() throws IOException, URISyntaxException {
-        String emial = "asjdkasjdl@163.com";
-        String password = "123456";
-        return JSONArray.toJSONString(linkOIDC.login(emial, password, "222"));
-    }
-
-    @GetMapping("/auth")
-    public String auth(String idToken) throws IOException, URISyntaxException {
-        return JSONArray.toJSONString(linkOIDC.auth(idToken));
-    }
 }
