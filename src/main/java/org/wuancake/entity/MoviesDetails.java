@@ -51,7 +51,7 @@ public class MoviesDetails extends MoviesBase {
      * 海报链接（poster）
      */
     @XmlElement
-    private String url;
+    private String poster;
 
     /**
      * 评分

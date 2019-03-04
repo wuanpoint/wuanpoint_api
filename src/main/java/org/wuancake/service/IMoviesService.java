@@ -32,4 +32,6 @@ public interface IMoviesService {
      * @return
      */
     List<MoviesDetails> getDetails(Integer offset, Integer limit);
+
+    List<MoviesDetails> getDetailsByKey(String q, Integer offset, Integer limit);
 }

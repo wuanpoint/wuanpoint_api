@@ -26,4 +26,9 @@ public class MoviesServiceImpl implements IMoviesService {
     public List<MoviesDetails> getDetails(Integer offset, Integer limit) {
         return moviesMapper.getDetails(offset, limit);
     }
+
+    @Override
+    public List<MoviesDetails> getDetailsByKey(String q, Integer offset, Integer limit) {
+        return moviesMapper.getDetailsByKey(q,offset,limit);
+    }
 }
