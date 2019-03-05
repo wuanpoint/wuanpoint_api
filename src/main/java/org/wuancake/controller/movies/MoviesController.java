@@ -1,15 +1,13 @@
 package org.wuancake.controller.movies;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.wuancake.entity.MoviesDetails;
+import org.springframework.web.bind.annotation.*;
+import org.wuancake.response.CoolResponseUtils;
+import org.wuancake.response.data.ResourceVO;
+import org.wuancake.response.data.ResultBody;
 import org.wuancake.response.data.SearchVO;
 import org.wuancake.service.IMoviesService;
+import org.wuancake.service.oidc.LinkOIDC;
 
 import java.util.List;
 
@@ -22,6 +20,8 @@ public class MoviesController {
 
     @Autowired
     private IMoviesService moviesService;
+    @Autowired
+    private LinkOIDC linkOIDC;
 
     /**
      * 首页/影片分类页（A1）
@@ -33,16 +33,17 @@ public class MoviesController {
      * @return 影片详细信息
      */
     @RequestMapping(value = "/api/movies", method = RequestMethod.GET)
-    public List<MoviesDetails> getDetailsByType(@RequestParam(value = "offset",required = false,defaultValue = "0") Integer offset,
+    public ResultBody getDetailsByType(@RequestParam(value = "offset",required = false,defaultValue = "0") Integer offset,
                                                 @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
                                                 String type) {
 
         if ("".equals(type) || null == type) {//TODO
-            return moviesService.getDetails(offset, limit);
+            return CoolResponseUtils.ok(moviesService.getDetails(offset, limit), "响应成功", "200");
         }
 
-        return moviesService.getDetailsByType(offset, limit, type);
+        return CoolResponseUtils.ok(moviesService.getDetailsByType(offset, limit, type), "响应成功", "200");
     }
+
 
     /**
      * 首页/搜索影视页（A3）
@@ -54,50 +55,53 @@ public class MoviesController {
      * @return 影片详细信息
      */
     @RequestMapping(value = "/api/movies/search", method = RequestMethod.POST)
-        public SearchVO search(@RequestParam("q") String q,
+        public ResultBody search(@RequestParam("q") String q,
                                @RequestParam(value = "offset",required = false,defaultValue = "0") Integer offset,
                                @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit) {
-        return new SearchVO(moviesService.getDetailsByKey(q,offset, limit));
+        return CoolResponseUtils.ok(new SearchVO(moviesService.getDetailsByKey(q,offset, limit)),"200","响应成功");
     }
+
 
     /**
      *  显示资源（评论)（Z2）
      *  电影详情类
-     *  resources.id	Int	资源id
-     *  resources.title	String	资源标题
-     *  resources.instruction	String	资源说明
-     *  resources.url	String	资源URL
-     *  resources.create_at	String	资源分享时间
-     *  resources.password	String	资源密码(网盘)
-     *  resources.type	String	资源类型
-     *  resources.sharer.id	Int	分享者id
-     *  resources.sharer.name	String	分享者姓名
      *
      * @param offset 起始页数 可以为空
      * @param limit 每页显示条数 可以为空
-     * @return
+     * @param id 影视movieId
+     * @return 资源列表
      */
     @RequestMapping(value = "/api/movies/{id}/resources",method = RequestMethod.GET)
-    public void getResources( @RequestParam(value = "offset",required = false,defaultValue = "0") Integer offset,
-                              @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit){
-
+    public List<ResourceVO> getResources(@RequestParam(value = "offset",required = false,defaultValue = "0") Integer offset,
+                                         @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
+                                         @PathVariable Integer id){
+        return moviesService.getResourcesById(id,offset, limit);
     }
+
 
     /**
      *  删除电影资源（R2）
+     *
      * @param accessToken
      * @param idToken
+     * @param movieId
+     * @param resourceId
      * @return
      */
     @RequestMapping(value = "/api/movies/{movieId}/resources/{resourceId}",method = RequestMethod.DELETE)
-    public ResponseEntity delResources(@RequestParam("Access-Token") String accessToken,
-                                       @RequestParam("ID-Token") String idToken){
+    public ResultBody delResources(@RequestParam("Access-Token") String accessToken,
+                                       @RequestParam("ID-Token") String idToken,
+                                       @PathVariable Integer movieId,
+                                       @PathVariable Integer resourceId){
         try {
-
-            return ResponseEntity.ok().body(HttpStatus.NO_CONTENT);
+            if (linkOIDC.getUserMsg_U3(idToken, accessToken)!=null){
+                moviesService.delResources(movieId,resourceId);
+                return new ResultBody("204","删除成功");
+            }
+            return new ResultBody("400", "删除失败,用户权限不足");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+            return new ResultBody("400", "删除失败");
         }
     }
 }

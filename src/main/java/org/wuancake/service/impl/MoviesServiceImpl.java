@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wuancake.entity.MoviesDetails;
 import org.wuancake.mapper.MoviesMapper;
+import org.wuancake.response.data.ResourceVO;
 import org.wuancake.service.IMoviesService;
 
 import java.util.List;
@@ -30,5 +31,15 @@ public class MoviesServiceImpl implements IMoviesService {
     @Override
     public List<MoviesDetails> getDetailsByKey(String q, Integer offset, Integer limit) {
         return moviesMapper.getDetailsByKey(q,offset,limit);
+    }
+
+    @Override
+    public List<ResourceVO> getResourcesById(Integer id, Integer offset, Integer limit) {
+        return moviesMapper.getResourcesById(id,offset,limit);
+    }
+
+    @Override
+    public void delResources(Integer movieId, Integer resourceId) {
+        moviesMapper.delResources(movieId,resourceId);
     }
 }

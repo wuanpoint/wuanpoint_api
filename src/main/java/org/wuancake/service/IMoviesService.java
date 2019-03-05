@@ -2,6 +2,7 @@ package org.wuancake.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.wuancake.entity.MoviesDetails;
+import org.wuancake.response.data.ResourceVO;
 
 import java.util.List;
 
@@ -34,4 +35,8 @@ public interface IMoviesService {
     List<MoviesDetails> getDetails(Integer offset, Integer limit);
 
     List<MoviesDetails> getDetailsByKey(String q, Integer offset, Integer limit);
+
+    List<ResourceVO> getResourcesById(Integer id, Integer offset, Integer limit);
+
+    void delResources(Integer movieId, Integer resourceId);
 }

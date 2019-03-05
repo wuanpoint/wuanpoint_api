@@ -1,6 +1,10 @@
 package org.wuancake.response;
 
+import org.wuancake.entity.MoviesDetails;
 import org.wuancake.response.data.ResultBody;
+import org.wuancake.response.data.SearchVO;
+
+import java.util.List;
 
 /**
  * 自定义响应工具类
@@ -25,4 +29,5 @@ public class CoolResponseUtils {
 
         return resultBody;
     }
+
 }

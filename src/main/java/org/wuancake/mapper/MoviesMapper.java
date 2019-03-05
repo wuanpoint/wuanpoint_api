@@ -1,7 +1,11 @@
 package org.wuancake.mapper;
 
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.wuancake.entity.MoviesDetails;
+import org.wuancake.response.data.ResourceVO;
 
 import java.util.List;
 
@@ -33,4 +37,11 @@ public interface MoviesMapper {
             "LIMIT #{offset},#{limit}")
     List<MoviesDetails> getDetailsByKey(@Param("q") String q, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
+    @Select("SELECT resource_id as id,rtd.type_name as type,title,instruction,url,created_at,sharer,password FROM resources rs,resources_type_details rtd " +
+            "WHERE rs.movies_id=#{id} AND rs.resource_type=rtd.type_id " +
+            "LIMIT #{offset},#{limit}")
+    List<ResourceVO> getResourcesById(@Param("id") Integer id, @Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    @Delete("delete from resources where movies_id=#{movieId} and resource_id=#{resourceId}")
+    void delResources(@Param("movieId") Integer movieId, @Param("resourceId") Integer resourceId);
 }
