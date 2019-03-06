@@ -21,6 +21,7 @@ import org.wuancake.entity.mid.MoviesActors;
 import org.wuancake.entity.mid.MoviesDirectors;
 import org.wuancake.entity.mid.MoviesType;
 import org.wuancake.mapper.MoviesMapper;
+import org.wuancake.response.data.ResourceVO;
 import org.wuancake.service.IMoviesService;
 
 import java.io.IOException;
@@ -48,6 +49,7 @@ public class MoviesServiceImpl implements IMoviesService {
     }
 
     @Override
+
     public List<MoviesGenresDetails> getMoviesType() {
         return moviesMapper.getMoviesTypeDetails();
     }
@@ -171,5 +173,19 @@ public class MoviesServiceImpl implements IMoviesService {
 
         HttpEntity resEntity = response.getEntity();
         return EntityUtils.toString(resEntity, "utf-8");
+
+    public List<MoviesDetails> getDetailsByKey(String q, Integer offset, Integer limit) {
+        return moviesMapper.getDetailsByKey(q,offset,limit);
+    }
+
+    @Override
+    public List<ResourceVO> getResourcesById(Integer id, Integer offset, Integer limit) {
+        return moviesMapper.getResourcesById(id,offset,limit);
+    }
+
+    @Override
+    public void delResources(Integer movieId, Integer resourceId) {
+        moviesMapper.delResources(movieId,resourceId);
+
     }
 }
