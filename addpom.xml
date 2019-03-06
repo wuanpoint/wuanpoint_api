@@ -1,0 +1,6 @@
+<!-- 我实现需求的时候新增了一个依赖 -->
+<dependency>
+	<groupId>com.google.code.gson</groupId>
+	<artifactId>gson</artifactId>
+	<version>2.8.5</version>
+</dependency>

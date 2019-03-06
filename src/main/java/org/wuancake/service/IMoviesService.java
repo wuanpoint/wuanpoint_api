@@ -2,8 +2,14 @@ package org.wuancake.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.wuancake.entity.MoviesDetails;
+
+import org.wuancake.entity.MoviesGenresDetails;
+
 import org.wuancake.response.data.ResourceVO;
 
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -28,15 +34,33 @@ public interface IMoviesService {
      * 首页/影片分类页（A1）
      * 根据类型获取影片的一些详情
      * 没有给出type
+     *
      * @param offset
      * @param limit
      * @return
      */
     List<MoviesDetails> getDetails(Integer offset, Integer limit);
 
+
+    /**
+     * 获取分类条目录(A4)
+     *
+     * @return
+     */
+    List<MoviesGenresDetails> getMoviesType();
+
+    /**
+     * 发现影片（Z3）
+     * @param url
+     * @param type
+     * @return
+     */
+    String findMovies(String url,String type) throws IOException, URISyntaxException;
+
     List<MoviesDetails> getDetailsByKey(String q, Integer offset, Integer limit);
 
     List<ResourceVO> getResourcesById(Integer id, Integer offset, Integer limit);
 
     void delResources(Integer movieId, Integer resourceId);
+
 }
