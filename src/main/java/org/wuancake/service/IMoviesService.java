@@ -1,6 +1,8 @@
 package org.wuancake.service;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.wuancake.entity.Actors;
+import org.wuancake.entity.Directors;
 import org.wuancake.entity.MoviesDetails;
 
 import org.wuancake.entity.MoviesGenresDetails;
@@ -51,11 +53,12 @@ public interface IMoviesService {
 
     /**
      * 发现影片（Z3）
+     *
      * @param url
      * @param type
      * @return
      */
-    String findMovies(String url,String type) throws IOException, URISyntaxException;
+    String findMovies(String url, String type) throws IOException, URISyntaxException;
 
     List<MoviesDetails> getDetailsByKey(String q, Integer offset, Integer limit);
 
@@ -63,4 +66,37 @@ public interface IMoviesService {
 
     void delResources(Integer movieId, Integer resourceId);
 
+    /**
+     * 根据影片id获取影片详细信息，
+     * 这个比byType查询获取的数据更多点
+     *
+     * @return
+     */
+    MoviesDetails getMovieDetailsById(Integer id);
+
+    /**
+     * 根据影片id获取这个影片的导演
+     *
+     * @param id
+     * @return
+     */
+    List<Directors> getDirectorsByMovieId(Integer id);
+
+    /**
+     * 根据影片id获取这个影片的演员集合
+     *
+     * @param id
+     * @return
+     */
+    List<Actors> getActorsByMovieId(Integer id);
+
+    /**
+     * 获取genres根据影片id
+     * <p>
+     * 是genres还是type，文档里是genres就按照这个来
+     *
+     * @param id
+     * @return
+     */
+    List<MoviesGenresDetails> getMoviesGenresDetailsByMovieId(Integer id);
 }

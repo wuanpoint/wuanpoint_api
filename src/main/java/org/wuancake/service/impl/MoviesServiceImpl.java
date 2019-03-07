@@ -190,4 +190,24 @@ public class MoviesServiceImpl implements IMoviesService {
 
     }
 
+    @Override
+    public MoviesDetails getMovieDetailsById(Integer id) {
+        return moviesMapper.getMovieDetailsById(id);
+    }
+
+    @Override
+    public List<Directors> getDirectorsByMovieId(Integer id) {
+        return moviesMapper.getDirectorsByMovieId(id);
+    }
+
+    @Override
+    public List<Actors> getActorsByMovieId(Integer id) {
+        return moviesMapper.getActorsByMovieId(id);
+    }
+
+    @Override
+    public List<MoviesGenresDetails> getMoviesGenresDetailsByMovieId(Integer id) {
+        return moviesMapper.getMoviesGenresDetailsByMovieId(id);
+    }
+
 }

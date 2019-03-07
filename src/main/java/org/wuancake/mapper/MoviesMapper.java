@@ -70,11 +70,12 @@ public interface MoviesMapper {
 
     /**
      * 为影片设置类型
+     *
      * @param moviesType
      * @return
      */
     @Insert("INSERT INTO movies_genres(`movies_id`,`genres_id`) VALUES(#{moviesType.moviesId},#{moviesType.genresId})")
-    int addMoviesType(@Param("moviesType")MoviesType moviesType);
+    int addMoviesType(@Param("moviesType") MoviesType moviesType);
 
     /**
      * 根据id查询影片
@@ -105,6 +106,7 @@ public interface MoviesMapper {
 
     /**
      * 向影片添加导演
+     *
      * @param moviesDirectors
      * @return
      */
@@ -131,29 +133,32 @@ public interface MoviesMapper {
 
     /**
      * 向影片添加演员
+     *
      * @param moviesActors
      * @return
      */
     @Insert("INSERT INTO movies_actors(`movie_id`,`actor_id`) VALUES(#{moviesActors.movieId},#{moviesActors.actorId})")
-    int addMoviesActors(@Param("moviesActors")MoviesActors moviesActors);
+    int addMoviesActors(@Param("moviesActors") MoviesActors moviesActors);
 
     /**
      * 添加影片详情
+     *
      * @param id
      * @param moviesDetails
      * @return
      */
     @Insert("INSERT INTO movies_details (`id`,`title`,`original_title`,`countries`,`year`,`aka`,`url_douban`)" +
             "VALUES(#{id},#{title},#{moviesDetails.originalTitle},#{moviesDetails.countries},#{moviesDetails.year},#{moviesDetails.aka},#{moviesDetails.urlDouban})")
-    int addMoviesDetails(@Param("id") int id,@Param("moviesDetails") MoviesDetails moviesDetails,@Param("title") String title);
+    int addMoviesDetails(@Param("id") int id, @Param("moviesDetails") MoviesDetails moviesDetails, @Param("title") String title);
 
     /**
      * 添加影片基础信息
+     *
      * @param moviesBase
      * @return
      */
     @Insert("INSERT INTO movies_base(`id`,`type`,`title`,`digest`) VALUES(#{moviesBase.id},#{moviesBase.type},#{moviesBase.title},#{moviesBase.digest})")
-    int addMoviesBase(@Param("moviesBase")MoviesBase moviesBase);
+    int addMoviesBase(@Param("moviesBase") MoviesBase moviesBase);
 
     @Select("SELECT mb.id,mb.title,digest,url as poster,rating " +
             "FROM movies_base mb,movies_details md,movies_poster mp,movies_rating mr " +
@@ -170,4 +175,25 @@ public interface MoviesMapper {
     @Delete("delete from resources where movies_id=#{movieId} and resource_id=#{resourceId}")
     void delResources(@Param("movieId") Integer movieId, @Param("resourceId") Integer resourceId);
 
+    @Select("SELECT mb.id,mb.title,mp.url,md.countries,md.year,md.aka,md.url_douban,ms.summary,mr.rating " +
+            "FROM movies_base mb,movies_poster mp,movies_details md,movies_summary ms,movies_rating mr " +
+            "WHERE mb.id=#{id} " +
+            "AND mb.id=mp.id AND mb.id=md.id AND mb.id=ms.id AND mv.id=mr.id")
+    MoviesDetails getMovieDetailsById(Integer id);
+
+    @Select("SELECT id,name " +
+            "FROM directors " +
+            "WHERE id=#{id}")
+    List<Directors> getDirectorsByMovieId(Integer id);
+
+    @Select("SELECT id,name " +
+            "FROM actors " +
+            "WHERE id=#{id}")
+    List<Actors> getActorsByMovieId(Integer id);
+
+    @Select("SELECT mgd.genres_id,mgd.genres_name  " +
+            "FROM movies_genres_details mgd,movies_genres mg " +
+            "WHWERE mg.movies_id=#{id} " +
+            "AND mg.genres_id=mgd.genres_id")
+    List<MoviesGenresDetails> getMoviesGenresDetailsByMovieId(Integer id);
 }
