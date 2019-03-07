@@ -120,9 +120,9 @@ public class MoviesServiceImpl implements IMoviesService {
         }
 
         //获取片名 title
-         MoviesBase moviesBase = new MoviesBase(id, moviesGenresDetails.getGenresId(), json.get("title").getAsString(), moviesDetails.getSummary(), null);
+        MoviesBase moviesBase = new MoviesBase(id, moviesGenresDetails.getGenresId(), json.get("title").getAsString(), moviesDetails.getSummary(), null);
 
-        if (moviesMapper.addMoviesDetails(id, moviesDetails,moviesBase.getTitle()) > 0 && moviesMapper.addMoviesBase(moviesBase) > 0)
+        if (moviesMapper.addMoviesDetails(id, moviesDetails, moviesBase.getTitle()) > 0 && moviesMapper.addMoviesBase(moviesBase) > 0)
             return "{\"id\":" + id + "}";
         return "{\"error\": \"添加失败\"}";
     }
@@ -173,19 +173,21 @@ public class MoviesServiceImpl implements IMoviesService {
 
         HttpEntity resEntity = response.getEntity();
         return EntityUtils.toString(resEntity, "utf-8");
+    }
 
     public List<MoviesDetails> getDetailsByKey(String q, Integer offset, Integer limit) {
-        return moviesMapper.getDetailsByKey(q,offset,limit);
+        return moviesMapper.getDetailsByKey(q, offset, limit);
     }
 
     @Override
     public List<ResourceVO> getResourcesById(Integer id, Integer offset, Integer limit) {
-        return moviesMapper.getResourcesById(id,offset,limit);
+        return moviesMapper.getResourcesById(id, offset, limit);
     }
 
     @Override
     public void delResources(Integer movieId, Integer resourceId) {
-        moviesMapper.delResources(movieId,resourceId);
+        moviesMapper.delResources(movieId, resourceId);
 
     }
+
 }
