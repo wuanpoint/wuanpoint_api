@@ -99,4 +99,11 @@ public interface IMoviesService {
      * @return
      */
     List<MoviesGenresDetails> getMoviesGenresDetailsByMovieId(Integer id);
+
+    /**
+     * 查询数量
+     *
+     * @return
+     */
+    String countMovies();
 }

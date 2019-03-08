@@ -1,9 +1,6 @@
 package org.wuancake.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.wuancake.entity.Resources;
 import org.wuancake.entity.ResourcesType;
 
@@ -16,6 +13,7 @@ import java.util.List;
 public interface ResourcesMapper {
     /**
      * 获取全部资源分类列表
+     *
      * @return
      */
     @Select("SELECT type_id typeId ,type_name typeName FROM resources_type_details")
@@ -23,6 +21,7 @@ public interface ResourcesMapper {
 
     /**
      * 获取分享者id
+     *
      * @param id
      * @return
      */
@@ -31,6 +30,7 @@ public interface ResourcesMapper {
 
     /**
      * 编辑资源
+     *
      * @param resources
      * @return
      */
@@ -40,4 +40,8 @@ public interface ResourcesMapper {
             "`password` = #{resources.password}," +
             "`instruction` = #{resources.instruction}")
     int update(@Param("resources") Resources resources);
+
+    @Insert("INSERT INTO resources(resource_type,title,url,instruction,password,created_at) " +
+            "VALUES(#{resources.resourceType},#{resources.title},#{resources.url},#{resources.instruction},#{resources.password},#{resources.createdAt})")
+    void addResource(Resources resources);
 }

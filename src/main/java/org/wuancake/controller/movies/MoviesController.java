@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.wuancake.entity.*;
 import org.wuancake.response.data.MovieDetailsData;
 import org.wuancake.service.IMoviesService;
+import org.wuancake.service.ResourcesService;
 import org.wuancake.service.oidc.JwtUtil;
 
 import org.wuancake.response.CoolResponseUtils;
@@ -22,6 +23,7 @@ import org.wuancake.service.oidc.LinkOIDC;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +37,10 @@ public class MoviesController {
     private IMoviesService moviesService;
     @Autowired
     private LinkOIDC linkOIDC;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private ResourcesService resourcesService;
 
     /**
      * 首页/影片分类页（A1）
@@ -49,11 +55,12 @@ public class MoviesController {
     public String getDetailsByType(@RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
                                    @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
                                    String type) {
+        String count = moviesService.countMovies();
 
         if ("".equals(type) || null == type) {//TODO
-            return "{\"movies\":" + moviesService.getDetails(offset, limit) + "}";
+            return "{\"movies\":" + moviesService.getDetails(offset, limit) + ",\"total\":\"" + count + "\"}";
         }
-        return "{\"movies\":" + moviesService.getDetailsByType(offset, limit, type) + "}";
+        return "{\"movies\":" + moviesService.getDetailsByType(offset, limit, type) + ",\"total\":\"" + count + "\"}";
     }
 
 
@@ -135,10 +142,42 @@ public class MoviesController {
         return moviesService.findMovies(url, type);
     }
 
+    /**
+     * 增加资源(R1)
+     *
+     * @param request
+     * @param id
+     * @param type
+     * @param title
+     * @param url
+     * @param password
+     * @param instruction
+     * @return
+     */
+    @RequestMapping(value = "/api/movies/{id}/resources", method = RequestMethod.POST)
+    public String addReousrces(HttpServletRequest request, @PathVariable Integer id, String type, String title, String url, String password, String instruction) {
+        String accessToken = request.getHeader("Access-Token");
+        String idToken = request.getHeader("ID-Token");
+        if (null == accessToken || null == idToken) {
+            return null;
+        }
+        try {
+            Claims claims = jwtUtil.parseJWT(idToken);
+            Integer uid = (Integer) claims.get("uid");
+            Resources resources = new Resources(id, type, title, instruction, url, password, uid, "", null);
+            resources.setCreatedAt(new Date());
+            resourcesService.addResources(resources);
+
+            return resources.toString();
+        } catch (Exception e) {
+            return "{\"error\":\"添加资源失败\"}";
+        }
+    }
+
 
     /**
-     * (R1)在ResourcesController
      * 删除电影资源（R2）
+     * (R3)在ResourcesController
      *
      * @param accessToken
      * @param idToken

@@ -8,6 +8,8 @@ import org.wuancake.entity.ResourcesType;
 import org.wuancake.mapper.ResourcesMapper;
 import org.wuancake.service.ResourcesService;
 
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,8 +22,8 @@ public class ResourcesServiceImpl implements ResourcesService {
     public boolean updateResources(Resources resources) {
         //如果分享者id不符则不做任何修改
         Integer sharerId = resourcesMapper.getSharerId(resources.getResourceId());
-        if (sharerId == null || sharerId != resources.getSharerId()){
-            log.error("id为: "+resources.getSharerId()+" 的账号试图修改其他分享者的资源。");
+        if (sharerId == null || sharerId != resources.getSharerId()) {
+            log.error("id为: " + resources.getSharerId() + " 的账号试图修改其他分享者的资源。");
             return false;
         }
         return resourcesMapper.update(resources) > 0;
@@ -30,5 +32,16 @@ public class ResourcesServiceImpl implements ResourcesService {
     @Override
     public List<ResourcesType> getResourcesType() {
         return resourcesMapper.getResourcesType();
+    }
+
+    @Override
+    public void addResources(Resources resources) throws SQLException {
+
+        try {
+            resourcesMapper.addResource(resources);
+        } catch (Exception e) {
+            throw new SQLException();
+        }
+
     }
 }

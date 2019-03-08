@@ -21,9 +21,19 @@ public class Resources {
     private Date updatedAt;//修改时间
     private Date createdAt;//创建时间
 
-    public Resources(Integer resource_id, Integer resource_type, String title, String instruction, String url, String password,Integer sharerId, String sharerName) {
+    public Resources(Integer resource_id, Integer resource_type, String title, String instruction, String url, String password, Integer sharerId, String sharerName) {
         this.resourceId = resource_id;
         this.resourceType = resource_type;
+        this.title = title;
+        this.instruction = instruction;
+        this.sharer = new Sharer(sharerId, sharerName);
+        this.url = url;
+        this.password = password;
+    }
+
+    public Resources(Integer resource_id, String type, String title, String instruction, String url, String password, Integer sharerId,String sharerName,Integer wtf) {
+        this.resourceId = resource_id;
+        this.type = type;
         this.title = title;
         this.instruction = instruction;
         this.sharer = new Sharer(sharerId, sharerName);
@@ -52,11 +62,11 @@ public class Resources {
         this.sharer = new Sharer(sharerId, sharerName);
     }
 
-    public Integer getSharerId(){
+    public Integer getSharerId() {
         return this.sharer.id;
     }
 
-    public String getSharerName(){
+    public String getSharerName() {
         return this.sharer.name;
     }
 }

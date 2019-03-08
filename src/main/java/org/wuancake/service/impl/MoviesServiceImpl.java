@@ -210,4 +210,9 @@ public class MoviesServiceImpl implements IMoviesService {
         return moviesMapper.getMoviesGenresDetailsByMovieId(id);
     }
 
+    @Override
+    public String countMovies() {
+        return moviesMapper.countMovies();
+    }
+
 }

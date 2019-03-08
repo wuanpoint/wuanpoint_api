@@ -196,4 +196,9 @@ public interface MoviesMapper {
             "WHWERE mg.movies_id=#{id} " +
             "AND mg.genres_id=mgd.genres_id")
     List<MoviesGenresDetails> getMoviesGenresDetailsByMovieId(Integer id);
+
+    @Select("SELECT COUNT(id) " +
+            "FROM movies_base ")
+//TODO 先用id查全部数量
+    String countMovies();
 }
