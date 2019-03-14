@@ -78,7 +78,11 @@ public class MoviesController {
     public ResultBody search(@RequestParam("q") String q,
                              @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
                              @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
-        return CoolResponseUtils.ok(new SearchVO(moviesService.getDetailsByKey(q, offset, limit)), "200", "响应成功");
+        List<MoviesDetails> detailsByKey = moviesService.getDetailsByKey(q, offset, limit);
+        if (detailsByKey!=null&&"".equals(detailsByKey)) {
+            return CoolResponseUtils.ok(detailsByKey, "200", "响应成功");
+        }
+        return CoolResponseUtils.ok(null,"400", "获取搜索信息失败");
     }
 
     /**
