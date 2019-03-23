@@ -1,23 +1,24 @@
 package org.wuancake.controller.movies;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import io.jsonwebtoken.Claims;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import org.wuancake.entity.*;
-import org.wuancake.request.R1RequestBody;
-import org.wuancake.response.data.*;
+import org.wuancake.response.data.MovieDetailsData;
 import org.wuancake.service.IMoviesService;
 import org.wuancake.service.ResourcesService;
-import org.wuancake.service.oidc.HttpResult;
 import org.wuancake.service.oidc.JwtUtil;
 
 import org.wuancake.response.CoolResponseUtils;
+import org.wuancake.response.data.ResourceVO;
+import org.wuancake.response.data.ResultBody;
+import org.wuancake.response.data.SearchVO;
+import org.wuancake.service.IMoviesService;
 
 import org.wuancake.service.oidc.LinkOIDC;
-import org.wuancake.service.oidc.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -51,15 +52,15 @@ public class MoviesController {
      * @return 影片详细信息
      */
     @RequestMapping(value = "/api/movies", method = RequestMethod.GET)
-    public A1Response getDetailsByType(@RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
-                                       @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
-                                       String type) {
+    public String getDetailsByType(@RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
+                                   @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
+                                   String type) {
         String count = moviesService.countMovies();
 
         if ("".equals(type) || null == type) {//TODO
-            return new A1Response(moviesService.getDetails(offset, limit), count);
+            return "{\"movies\":" + moviesService.getDetails(offset, limit) + ",\"total\":\"" + count + "\"}";
         }
-        return new A1Response(moviesService.getDetailsByType(offset, limit, type), count);
+        return "{\"movies\":" + moviesService.getDetailsByType(offset, limit, type) + ",\"total\":\"" + count + "\"}";
     }
 
 
@@ -78,10 +79,10 @@ public class MoviesController {
                              @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
                              @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
         List<MoviesDetails> detailsByKey = moviesService.getDetailsByKey(q, offset, limit);
-        if (detailsByKey != null && "".equals(detailsByKey)) {
+        if (detailsByKey!=null&&"".equals(detailsByKey)) {
             return CoolResponseUtils.ok(detailsByKey, "200", "响应成功");
         }
-        return CoolResponseUtils.ok(null, "400", "获取搜索信息失败");
+        return CoolResponseUtils.ok(null,"400", "获取搜索信息失败");
     }
 
     /**
@@ -101,7 +102,7 @@ public class MoviesController {
      * @return blabla
      */
     @RequestMapping(value = "/api/movies/{id}", method = RequestMethod.GET)
-    public Object movieDetails(@PathVariable("id") final Integer id) {
+    public ResultBody movieDetails(@PathVariable("id") final Integer id) {
         MovieDetailsData movieDetailsData = null;
         if (null == id) {
             return CoolResponseUtils.ok(null, "获取影片信息失败", "400");
@@ -118,7 +119,7 @@ public class MoviesController {
             List<MoviesGenresDetails> moviesTypeDetailsList = moviesService.getMoviesGenresDetailsByMovieId(id);
             movieDetailsData = new MovieDetailsData(moviesDetails, moviesTypeDetailsList, directorsList, actorsList);
         }
-        return movieDetailsData;
+        return CoolResponseUtils.ok(movieDetailsData, "响应成功", "200");
     }
 
     /**
@@ -145,38 +146,36 @@ public class MoviesController {
         return moviesService.findMovies(url, type);
     }
 
-
+    /**
+     * 增加资源(R1)
+     *
+     * @param request
+     * @param id
+     * @param type
+     * @param title
+     * @param url
+     * @param password
+     * @param instruction
+     * @return
+     */
     @RequestMapping(value = "/api/movies/{id}/resources", method = RequestMethod.POST)
-    public Object addReousrces(HttpServletRequest request,
-                               @PathVariable Integer id,
-                               @RequestBody R1RequestBody r1Body) {
+    public String addReousrces(HttpServletRequest request, @PathVariable Integer id, String type, String title, String url, String password, String instruction) {
         String accessToken = request.getHeader("Access-Token");
         String idToken = request.getHeader("ID-Token");
         if (null == accessToken || null == idToken) {
             return null;
         }
         try {
-            HttpResult userMsg_u3 = linkOIDC.getUserMsg_U3(idToken, accessToken);
-            String resultMessage = userMsg_u3.getResultMessage();
-            User user = (User) JSON.parse(resultMessage);
-            String name = user.getName();
             Claims claims = jwtUtil.parseJWT(idToken);
-            Integer uid = (Integer) claims.get("uid");//貌似R3是这样获取分享者id的
-            Integer resourceTypeId = getResourceTypeIdByResourceTypeName(r1Body.getType());//沒理解接口文檔
-            Resources resources = new Resources(id, resourceTypeId, r1Body.getTitle(), r1Body.getUrl(), r1Body.getInstruction(), r1Body.getPassword(), uid, name, null);
-            Date date = new Date();
-            resources.setCreatedAt(date);
+            Integer uid = (Integer) claims.get("uid");
+            Resources resources = new Resources(id, type, title, instruction, url, password, uid, "", null);
+            resources.setCreatedAt(new Date());
             resourcesService.addResources(resources);
 
-            return new Resources(resources.getResourceId(), r1Body.getTitle(), r1Body.getInstruction(), uid, name, r1Body.getUrl(), date, r1Body.getPassword(), r1Body.getType());
+            return resources.toString();
         } catch (Exception e) {
-            e.printStackTrace();
             return "{\"error\":\"添加资源失败\"}";
         }
-    }
-
-    private Integer getResourceTypeIdByResourceTypeName(String type) {
-        return resourcesService.getResourceTypeIdByResourceTypeName(type);
     }
 
 

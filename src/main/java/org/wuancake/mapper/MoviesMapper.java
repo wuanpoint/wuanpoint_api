@@ -26,20 +26,18 @@ import java.util.List;
 @Mapper
 public interface MoviesMapper {
 
-    @Select("SELECT mb.id,mb.title,digest,url,rating " +
-            "FROM movies_base mb,movies_details md,movies_poster mp,movies_rating mr " +
+    @Select("SELECT mb.id,mb.title,digest,url " +
+            "FROM movies_base mb,movies_details md,movies_poster mp " +
             "WHERE mb.type=#{type} " +
             "AND mb.id=md.id " +
             "AND mb.id=mp.id " +
-            "And mb.id=mr.id " +
             "LIMIT #{offset},#{limit}")
     List<MoviesDetails> getDetailsByType(@Param("offset") Integer offset, @Param("limit") Integer limit, @Param("type") String type);
 
-    @Select("SELECT mb.id,mb.title,digest,url,rating " +
-            "FROM movies_base mb,movies_details md,movies_poster mp,movies_rating mr " +
+    @Select("SELECT mb.id,mb.title,digest,url " +
+            "FROM movies_base mb,movies_details md,movies_poster mp " +
             "WHERE mb.id=md.id " +
             "AND mb.id=mp.id " +
-            "And mb.id=mr.id " +
             "LIMIT #{offset},#{limit}")
     List<MoviesDetails> getDetails(@Param("offset") Integer offset, @Param("limit") Integer limit);
 
@@ -177,10 +175,10 @@ public interface MoviesMapper {
     @Delete("delete from resources where movies_id=#{movieId} and resource_id=#{resourceId}")
     void delResources(@Param("movieId") Integer movieId, @Param("resourceId") Integer resourceId);
 
-    @Select("SELECT mb.id,mb.title,mp.url,md.countries,md.year,md.aka,md.url_douban,md.original_title,ms.summary,mr.rating " +
+    @Select("SELECT mb.id,mb.title,mp.url,md.countries,md.year,md.aka,md.url_douban,ms.summary,mr.rating " +
             "FROM movies_base mb,movies_poster mp,movies_details md,movies_summary ms,movies_rating mr " +
             "WHERE mb.id=#{id} " +
-            "AND mb.id=mp.id AND mb.id=md.id AND mb.id=ms.id AND mb.id=mr.id")
+            "AND mb.id=mp.id AND mb.id=md.id AND mb.id=ms.id AND mv.id=mr.id")
     MoviesDetails getMovieDetailsById(Integer id);
 
     @Select("SELECT id,name " +
@@ -195,7 +193,7 @@ public interface MoviesMapper {
 
     @Select("SELECT mgd.genres_id,mgd.genres_name  " +
             "FROM movies_genres_details mgd,movies_genres mg " +
-            "WHERE mg.movies_id=#{id} " +
+            "WHWERE mg.movies_id=#{id} " +
             "AND mg.genres_id=mgd.genres_id")
     List<MoviesGenresDetails> getMoviesGenresDetailsByMovieId(Integer id);
 

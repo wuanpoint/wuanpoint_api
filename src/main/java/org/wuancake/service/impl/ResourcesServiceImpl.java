@@ -40,14 +40,8 @@ public class ResourcesServiceImpl implements ResourcesService {
         try {
             resourcesMapper.addResource(resources);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new SQLException();
         }
 
-    }
-
-    @Override
-    public Integer getResourceTypeIdByResourceTypeName(String type) {
-        return resourcesMapper.getResourceTypeIdByResourceTypeName(type);
     }
 }

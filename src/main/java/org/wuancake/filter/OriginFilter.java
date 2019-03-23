@@ -38,16 +38,16 @@ public class OriginFilter implements Filter {
 //    	req.setCharacterEncoding("utf-8");
 //    	res.setCharacterEncoding("utf-8");
         HttpServletResponse response = (HttpServletResponse) res;
-//        if (null == whiteList || whiteList.size() == 0) {
-//            response.setHeader("Access-Control-Allow-Origin", "null");
-//        }
-//        String origin = ((HttpServletRequest) req).getHeader("origin");
-//        for (String ip : whiteList) {
-//            if (null != ip && origin.equals(ip)) {
-//                isValidOrigin = true;
-//            }
-//        }
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        if (null == whiteList || whiteList.size() == 0) {
+            response.setHeader("Access-Control-Allow-Origin", "null");
+        }
+        String origin = ((HttpServletRequest) req).getHeader("origin");
+        for (String ip : whiteList) {
+            if (null != ip && origin.equals(ip)) {
+                isValidOrigin = true;
+            }
+        }
+        response.setHeader("Access-Control-Allow-Origin", doFilte ? isValidOrigin ? origin : "null" : "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, OPTIONS, PATCH");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "content-type");
