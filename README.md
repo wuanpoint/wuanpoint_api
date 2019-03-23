@@ -18,21 +18,21 @@ vim wuanpoint_application.yml
 #########################################################################################################
 
 
-spring:
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://ip:port/database_name?useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
-    username: username
-    password: password
-server:
-  port: port
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-WUAN_POINT:
-  APP_NAME: #应用名称
-  SECRET: #午安点评项目秘钥
-  SCOPE: #授权范围
-  JWT_SECRET: #JWT秘钥
-  OIDC_DOMAIN_NAME: #OIDC域名
-  SUB_APP: #午安点评作为子系统的id，暂无,233是随便写的一个数
+spring:<br/>
+  datasource:<br/>
+    driver-class-name: com.mysql.jdbc.Driver<br/>
+    url: jdbc:mysql://ip:port/database_name?useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true<br/>
+    username: username<br/>
+    password: password<br/>
+server:<br/>
+  port: port<br/>
+mybatis:<br/>
+  configuration:<br/>
+    map-underscore-to-camel-case: true<br/>
+WUAN_POINT:<br/>
+  APP_NAME: #应用名称<br/>
+  SECRET: #午安点评项目秘钥<br/>
+  SCOPE: #授权范围<br/>
+  JWT_SECRET: #JWT秘钥<br/>
+  OIDC_DOMAIN_NAME: #OIDC域名<br/>
+  SUB_APP: #午安点评作为子系统的id，暂无,233是随便写的一个数<br/>
