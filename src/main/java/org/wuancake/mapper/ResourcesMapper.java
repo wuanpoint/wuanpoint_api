@@ -41,7 +41,11 @@ public interface ResourcesMapper {
             "`instruction` = #{resources.instruction}")
     int update(@Param("resources") Resources resources);
 
-    @Insert("INSERT INTO resources(resource_type,title,url,instruction,password,created_at) " +
-            "VALUES(#{resources.resourceType},#{resources.title},#{resources.url},#{resources.instruction},#{resources.password},#{resources.createdAt})")
-    void addResource(Resources resources);
+    @Insert("INSERT INTO resources(movies_id,resource_type,title,url,instruction,password,created_at,sharer) " +
+            "VALUES(#{resources.moviesId},#{resources.resourceType},#{resources.title},#{resources.url},#{resources.instruction},#{resources.password},#{resources.createdAt},#{resources.sharerId})")
+    @Options(useGeneratedKeys=true, keyProperty="resourceId", keyColumn="resource_id")
+    void addResource(@Param("resources") Resources resources);
+
+    @Select("select type_id from resources_type_details where type_name=#{type}")
+    Integer getResourceTypeIdByResourceTypeName(String type);
 }

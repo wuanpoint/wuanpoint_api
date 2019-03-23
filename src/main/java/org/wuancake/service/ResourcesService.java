@@ -28,4 +28,6 @@ public interface ResourcesService {
      * @param resources
      */
     void addResources(Resources resources) throws SQLException;
+
+    Integer getResourceTypeIdByResourceTypeName(String type);
 }

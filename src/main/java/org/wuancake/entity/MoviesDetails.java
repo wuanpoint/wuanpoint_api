@@ -1,5 +1,6 @@
 package org.wuancake.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -20,49 +21,44 @@ public class MoviesDetails extends MoviesBase {
     /**
      * 影片原名
      */
-    @XmlElement
+    @JsonProperty("original_title")
     private String originalTitle;
 
     /**
      * 制片国家/地区
      */
-    @XmlElement
     private String countries;
 
     /**
      * 年代
      */
-    @XmlElement
     private String year;
 
     /**
      * 影片别名
      */
-    @XmlElement
     private String aka;
 
     /**
      * 豆瓣链接
      */
-    @XmlElement
+    @JsonProperty("url_douban")
     private String urlDouban;
 
     /**
      * 海报链接（poster）
      */
-    @XmlElement
-    private String poster;
+    @JsonProperty("poster_url")
+    private String url;
 
     /**
      * 评分
      */
-    @XmlElement
     private float rating;
 
     /**
      * 简介
      */
-    @XmlElement
     private String summary;
 
 

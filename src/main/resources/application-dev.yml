@@ -2,11 +2,24 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://ip:port/database_name?useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
-    username: username
-    password: password
-server:
-  port: 8081
+    url: jdbc:mysql://localhost:3306/wuanpoint?useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    username: root
+    password: 123456
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+    #端口
+server:
+  port: 8080
+
+###午安点评配置，由于dev配置文件不让上传，就把需要的配置项写在这里了
+WUAN_POINT:
+  APP_NAME: WUAN_POINT  #应用名称
+  SECRET: $2a$10$8Z9miMLQCwMkxMx0JuubD.Kwp5EDbfe0z7rMhGun7IcVntEf/RGE6 #午安点评项目秘钥
+  SCOPE: public_profile #授权范围
+  JWT_SECRET: 08caII1U7sgJ1HEdBWkZtgTdnF3ie5Em #JWT秘钥
+  OIDC_DOMAIN_NAME: http://dev-oidc.wuanla.tk #OIDC域名
+  SUB_APP: 233 #午安点评作为子系统的id，暂无,233是随便写的一个数
+
+
+
